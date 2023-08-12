@@ -1,6 +1,5 @@
 package kanti.domain
 
-import android.content.Intent
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.TextView
@@ -31,13 +30,7 @@ class ZipActivity : AppCompatActivity() {
                     text = "User: ${messageWithUser.user.name}: ${messageWithUser.text}"
                     setOnClickListener {
                         val userId = messageWithUser.user.id
-                        val intent = Intent(
-                            this@ZipActivity,
-                            UserScreenActivity::class.java
-                        ).apply {
-                            putExtra(UserIdExtra, userId)
-                        }
-                        startActivity(intent)
+                        UserScreenActivity.startActivity(this@ZipActivity, userId)
                     }
                 }
                 view.root.addView(messageTextView)
@@ -45,10 +38,6 @@ class ZipActivity : AppCompatActivity() {
         }
 
         zipViewModel.getMessages()
-    }
-
-    companion object {
-        const val UserIdExtra = "userId"
     }
 
 }

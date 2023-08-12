@@ -1,5 +1,7 @@
 package kanti.domain
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
 import androidx.activity.viewModels
@@ -51,12 +53,25 @@ class UserScreenActivity : AppCompatActivity() {
     }
 
     private fun showUserData() {
-        intent.extras?.getInt(ZipActivity.UserIdExtra).apply {
+        intent.extras?.getInt(UserIdExtra).apply {
             if (this == null) {
                 viewModel.notFoundUser()
             } else {
                 viewModel.showUser(this)
             }
         }
+    }
+
+    companion object {
+
+        const val UserIdExtra = "userId"
+
+        fun startActivity(context: Context, userId: Int) {
+            val intent = Intent(context, UserScreenActivity::class.java).apply {
+                putExtra(UserIdExtra, userId)
+            }
+            context.startActivity(intent)
+        }
+
     }
 }
