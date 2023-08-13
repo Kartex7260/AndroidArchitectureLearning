@@ -20,6 +20,7 @@ class ZipActivity : AppCompatActivity() {
         setContentView(view.root)
 
         zipViewModel.messages.observe(this) {
+            view.root.removeAllViews()
             for (messageWithUser in it.messages) {
                 val messageTextView = TextView(this).apply {
                     textSize = TypedValue.applyDimension(
@@ -37,6 +38,11 @@ class ZipActivity : AppCompatActivity() {
             }
         }
 
+        zipViewModel.getMessages()
+    }
+
+    override fun onResume() {
+        super.onResume()
         zipViewModel.getMessages()
     }
 

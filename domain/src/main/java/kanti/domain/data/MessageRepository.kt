@@ -1,9 +1,5 @@
 package kanti.domain.data
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
-import kotlin.coroutines.CoroutineContext
-
 class MessageRepository private constructor() : ArrayList<Message>() {
 
     fun addNewMessage(userId: Int, text: String): Message {
@@ -14,6 +10,7 @@ class MessageRepository private constructor() : ArrayList<Message>() {
             return message
         }
         val message = Message(last.id + 1, text, userId)
+        add(message)
         return message
     }
 
@@ -21,7 +18,7 @@ class MessageRepository private constructor() : ArrayList<Message>() {
 
         private lateinit var _instance: MessageRepository
 
-        fun getInstance(dispatcher: CoroutineContext): MessageRepository {
+        fun getInstance(): MessageRepository {
             if (!::_instance.isInitialized)
                 _instance = MessageRepository().apply {
                     add(Message(0, "Хаааай", 0))

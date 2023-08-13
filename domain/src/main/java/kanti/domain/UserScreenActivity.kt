@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.snackbar.Snackbar
@@ -20,6 +21,7 @@ class UserScreenActivity : AppCompatActivity() {
         setContentView(view.root)
 
         observeUserData()
+        addingUser()
         showUserData()
     }
 
@@ -31,6 +33,7 @@ class UserScreenActivity : AppCompatActivity() {
             }
             view.apply {
                 textViewUser.text = uiState.userName
+                llMessages.removeAllViews()
                 for (message in uiState.messageList) {
                     val textViewMessage = TextView(this@UserScreenActivity).apply {
                         text = message.text
@@ -59,6 +62,22 @@ class UserScreenActivity : AppCompatActivity() {
             } else {
                 viewModel.showUser(this)
             }
+        }
+    }
+
+    private fun addingUser() {
+        view.buttonAddNewMessage.setOnClickListener {
+            val text = view.editTextNewMessage.text.toString()
+            if (text == "") {
+                Toast.makeText(
+                    this@UserScreenActivity,
+                    "Field is empty!",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+            viewModel.addMessage(text)
+            view.editTextNewMessage.text.clear()
         }
     }
 

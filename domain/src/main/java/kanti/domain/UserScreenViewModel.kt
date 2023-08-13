@@ -20,7 +20,7 @@ import kotlinx.coroutines.withContext
 
 class UserScreenViewModel(
     users: UserRepository,
-    messages: MessageRepository,
+    private val messages: MessageRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
 
@@ -31,21 +31,26 @@ class UserScreenViewModel(
         dispatcher
     )
 
+    private var userId: Int? = null
+
     private val _userWithMessages = MutableLiveData<UserWithMessagesUiState>()
     val userWithMessages: LiveData<UserWithMessagesUiState> = _userWithMessages
 
     fun showUser(userId: Int) {
+        this.userId = userId
         viewModelScope.launch {
-            Log.d("usvmThread", Thread.currentThread().name)
-            val userWithMessages = getUserWithMessagesUseCase(userId)
-            if (userWithMessages == null) {
-                notFoundUser()
-                return@launch
+            updateUserWithMessages(userId)
+        }
+    }
+
+    fun addMessage(text: String) {
+        if (userId == null)
+            return
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                messages.addNewMessage(userId!!, text)
             }
-            val userWithMessagesUiState = withContext(dispatcher) {
-                userDataToUiState(userWithMessages)
-            }
-            _userWithMessages.value = userWithMessagesUiState
+            updateUserWithMessages(userId!!)
         }
     }
 
@@ -54,11 +59,23 @@ class UserScreenViewModel(
             ?: UserWithMessagesUiState("", listOf(), "Not found user!")
     }
 
-    private fun userDataToUiState(uwm: UserWithMessages): UserWithMessagesUiState {
+    private suspend fun updateUserWithMessages(userId: Int) {
+        val userWithMessages = getUserWithMessagesUseCase(userId)
+        if (userWithMessages == null) {
+            notFoundUser()
+            return
+        }
+        val userWithMessagesUiState = userDataToUiState(userWithMessages)
+        _userWithMessages.value = userWithMessagesUiState
+    }
+
+    private suspend fun userDataToUiState(
+        uwm: UserWithMessages
+    ): UserWithMessagesUiState = withContext(dispatcher) {
         val messageUiStates = ArrayList<MessageUiState>()
         for (message in uwm.messages)
             messageUiStates.add(MessageUiState(message.text))
-        return UserWithMessagesUiState(uwm.user.name, messageUiStates, null)
+        UserWithMessagesUiState(uwm.user.name, messageUiStates, null)
     }
 
     companion object {
