@@ -37,6 +37,9 @@ class UserScreenActivity : AppCompatActivity() {
                 for (message in uiState.messageList) {
                     val textViewMessage = TextView(this@UserScreenActivity).apply {
                         text = message.text
+                        setOnClickListener {
+                            viewModel.removeMessage(message.id)
+                        }
                     }
                     llMessages.addView(textViewMessage)
                 }

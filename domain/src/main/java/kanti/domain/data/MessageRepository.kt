@@ -14,6 +14,8 @@ class MessageRepository private constructor() : ArrayList<Message>() {
         return message
     }
 
+    fun removeMessage(id: Int) = removeIf { it.id == id }
+
     companion object {
 
         private lateinit var _instance: MessageRepository

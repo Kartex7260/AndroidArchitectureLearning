@@ -1,6 +1,5 @@
 package kanti.domain
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -54,6 +53,19 @@ class UserScreenViewModel(
         }
     }
 
+    fun removeMessage(id: Int) {
+        if (userId == null)
+            return
+        viewModelScope.launch {
+            var result: Boolean
+            withContext(dispatcher) {
+                result = messages.removeMessage(id)
+            }
+            if (result)
+                updateUserWithMessages(userId!!)
+        }
+    }
+
     fun notFoundUser() {
         _userWithMessages.value = _userWithMessages.value?.copy(error = "Not found user!")
             ?: UserWithMessagesUiState("", listOf(), "Not found user!")
@@ -74,7 +86,7 @@ class UserScreenViewModel(
     ): UserWithMessagesUiState = withContext(dispatcher) {
         val messageUiStates = ArrayList<MessageUiState>()
         for (message in uwm.messages)
-            messageUiStates.add(MessageUiState(message.text))
+            messageUiStates.add(MessageUiState(message.id, message.text))
         UserWithMessagesUiState(uwm.user.name, messageUiStates, null)
     }
 
