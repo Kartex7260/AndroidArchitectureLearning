@@ -9,6 +9,11 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AndroidArchitectureLearning">
         <activity
+            android:name=".UserListActivity"
+            android:label="@string/title_activity_user_list"
+            android:exported="false"
+            android:theme="@style/Theme.AndroidArchitectureLearning"/>
+        <activity
             android:name=".UserScreenActivity"
             android:label="@string/title_activity_user_screen"
             android:exported="false"

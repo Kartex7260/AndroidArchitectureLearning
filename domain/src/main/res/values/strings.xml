@@ -2,6 +2,7 @@
     <string name="app_name">domain</string>
     <string name="title_activity_zip">Zip</string>
     <string name="title_activity_user_screen">User screen</string>
+    <string name="title_activity_user_list">User list</string>
 
     <string name="lorem_ipsum">
         Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam in scelerisque sem. Mauris

@@ -19,5 +19,10 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, ZipActivity::class.java)
             startActivity(intent)
         }
+
+        view.btnUserList.setOnClickListener {
+            val intent = Intent(this, UserListActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

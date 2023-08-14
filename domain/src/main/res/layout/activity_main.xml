@@ -11,7 +11,19 @@
         android:id="@+id/btnZip"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Zip"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="Messages with user"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btnUserList"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="User list"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnZip" />
 </androidx.constraintlayout.widget.ConstraintLayout>
