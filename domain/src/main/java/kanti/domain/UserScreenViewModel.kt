@@ -9,6 +9,7 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kanti.domain.data.MessageRepository
 import kanti.domain.data.UserRepository
+import kanti.domain.domain.DeleteUserAndAllMessagesUseCase
 import kanti.domain.domain.GetAllUserMessagesUseCase
 import kanti.domain.domain.GetUserWithMessagesUseCase
 import kanti.domain.domain.UserWithMessages
@@ -18,7 +19,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 class UserScreenViewModel(
-    users: UserRepository,
+    private val users: UserRepository,
     private val messages: MessageRepository,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Default
 ) : ViewModel() {
@@ -29,11 +30,15 @@ class UserScreenViewModel(
         getAllUserMessagesUseCase,
         dispatcher
     )
+    private val deleteUserAndAllMessagesUseCase = DeleteUserAndAllMessagesUseCase(users, messages)
 
     private var userId: Int? = null
 
     private val _userWithMessages = MutableLiveData<UserWithMessagesUiState>()
     val userWithMessages: LiveData<UserWithMessagesUiState> = _userWithMessages
+
+    private val _userDeleted = MutableLiveData<Unit>()
+    val userDeleted: LiveData<Unit> = _userDeleted
 
     fun showUser(userId: Int) {
         this.userId = userId
@@ -63,6 +68,16 @@ class UserScreenViewModel(
             }
             if (result)
                 updateUserWithMessages(userId!!)
+        }
+    }
+
+    fun deleteUser() {
+        if (userId == null)
+            return
+        viewModelScope.launch {
+            val userDeleted = deleteUserAndAllMessagesUseCase(userId!!)
+            if (userDeleted)
+                _userDeleted.value = Unit
         }
     }
 

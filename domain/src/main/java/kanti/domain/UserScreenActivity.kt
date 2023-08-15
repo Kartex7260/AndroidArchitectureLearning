@@ -21,7 +21,9 @@ class UserScreenActivity : AppCompatActivity() {
         setContentView(view.root)
 
         observeUserData()
-        addingUser()
+        observeUserDeleting()
+        buttonAddNewMessage()
+        buttonDeleteUser()
         showUserData()
     }
 
@@ -47,6 +49,12 @@ class UserScreenActivity : AppCompatActivity() {
         }
     }
 
+    private fun observeUserDeleting() {
+        viewModel.userDeleted.observe(this) {
+            finish()
+        }
+    }
+
     private fun showSnackbar() {
         Snackbar.make(view.root, "Not found user!", Snackbar.LENGTH_LONG).apply {
             addCallback(object : Snackbar.Callback() {
@@ -68,7 +76,7 @@ class UserScreenActivity : AppCompatActivity() {
         }
     }
 
-    private fun addingUser() {
+    private fun buttonAddNewMessage() {
         view.buttonAddNewMessage.setOnClickListener {
             val text = view.editTextNewMessage.text.toString()
             if (text == "") {
@@ -81,6 +89,12 @@ class UserScreenActivity : AppCompatActivity() {
             }
             viewModel.addMessage(text)
             view.editTextNewMessage.text.clear()
+        }
+    }
+
+    private fun buttonDeleteUser() {
+        view.buttonDelete.setOnClickListener {
+            viewModel.deleteUser()
         }
     }
 

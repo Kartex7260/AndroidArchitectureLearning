@@ -14,6 +14,8 @@ class UserRepository private constructor() : ArrayList<User>() {
         return user
     }
 
+    fun deleteUser(id: Int): Boolean = removeIf { it.id == id }
+
     companion object {
 
         private lateinit var _instance: UserRepository
