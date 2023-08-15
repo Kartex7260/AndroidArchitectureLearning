@@ -2,6 +2,7 @@ package kanti.domain
 
 import android.os.Bundle
 import android.widget.TextView
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import kanti.domain.databinding.ActivityUserListBinding
@@ -17,6 +18,7 @@ class UserListActivity : AppCompatActivity() {
         setContentView(view.root)
 
         observeUsers()
+        addNewUserButton()
         viewModel.getUsers()
     }
 
@@ -42,6 +44,18 @@ class UserListActivity : AppCompatActivity() {
             }
         }
         view.llUserList.addView(userTextView)
+    }
+
+    private fun addNewUserButton() {
+        view.buttonAddUser.setOnClickListener {
+            val userName = view.editTextUserName.text.toString()
+            if (userName == "") {
+                Toast.makeText(this, "User name field is empty!", Toast.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            view.editTextUserName.text.clear()
+            viewModel.addNewUser(userName)
+        }
     }
 
 }

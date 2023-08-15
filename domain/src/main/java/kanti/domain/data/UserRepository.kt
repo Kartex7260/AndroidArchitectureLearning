@@ -2,6 +2,18 @@ package kanti.domain.data
 
 class UserRepository private constructor() : ArrayList<User>() {
 
+    fun addNewUser(name: String): User {
+        val lastUser = lastOrNull()
+        if (lastUser == null) {
+            val user = User(0, name)
+            add(user)
+            return user
+        }
+        val user = User(lastUser.id + 1, name)
+        add(user)
+        return user
+    }
+
     companion object {
 
         private lateinit var _instance: UserRepository

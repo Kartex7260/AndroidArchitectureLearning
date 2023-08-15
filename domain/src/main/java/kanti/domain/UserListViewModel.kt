@@ -22,6 +22,15 @@ class UserListViewModel(
     private val _userList: MutableLiveData<UserListUiState> = MutableLiveData()
     val userList: LiveData<UserListUiState> = _userList
 
+    fun addNewUser(name: String) {
+        viewModelScope.launch {
+            withContext(dispatcher) {
+                users.addNewUser(name)
+            }
+            getUsers()
+        }
+    }
+
     fun getUsers() {
         viewModelScope.launch {
             var userListUiState: UserListUiState
